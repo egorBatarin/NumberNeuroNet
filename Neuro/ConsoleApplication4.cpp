@@ -102,7 +102,7 @@ int main()
 					for (int i = 0; i < alldata; i++)
 						printf("%d,", neirarr[i]);
 
-					std::ofstream of("x.txt");
+					std::ofstream of("./Data/x.txt");
 					if (!of.is_open())
 					{
 						std::cout << "Can't open file!";
