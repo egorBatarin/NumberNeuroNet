@@ -4,7 +4,9 @@
 #include <algorithm>
 #include <cmath>
 #include <fstream>
+#include <string>
 
+void presenting_results();
 void neuronet();
 size_t max_index(matrix::Matrix<>& matr);
 const int alldata = 784;
@@ -113,6 +115,7 @@ int main()
 					of << neirarr[alldata - 1];
 					of.close();
 					neuronet();
+					presenting_results ();
 				}
 			}
 		}
@@ -182,4 +185,32 @@ size_t max_index(matrix::Matrix<>& matr)
 		index++;
 	}
 	return max_index;
+}
+
+void presenting_results ()
+{
+	sf::RenderWindow ResWindow(sf::VideoMode(xsize, ysize), "Results window", sf::Style::Titlebar | sf::Style::Close);
+	sf::Text text;
+	sf::Font font;
+	font.loadFromFile("Times New Roman Cyr Regular.ttf");
+	std::string result;
+	std::ifstream of("result.txt");
+	getline(of, result);
+	text.setFont(font);
+	text.setCharacterSize(24);
+	text.setFillColor(sf::Color::White);
+	result = "You'r number is: " + result;
+	text.setString(result);
+
+	while (ResWindow.isOpen())
+	{
+		ResWindow.draw(text);
+		sf::Event event;
+		while (ResWindow.pollEvent(event))
+		{
+			if (event.type == sf::Event::Closed)
+				ResWindow.close();
+		}
+	ResWindow.display();
+	}
 }
