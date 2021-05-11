@@ -3,6 +3,8 @@ This project is dedicated to neuronet, which recognizes numbers 0-9, painted in 
 
 The main program is located in the Neuro folder.
 
-cd Neuro
-make
+cd Neuro  
+
+make  
+
 ./sfml-app.out
