@@ -105,6 +105,7 @@ int main()
 						printf("%d,", neirarr[i]);
 
 					std::ofstream of("./Data/x.txt");
+					//std::ofstream of("./x.txt");
 					if (!of.is_open())
 					{
 						std::cout << "Can't open file!";
@@ -163,6 +164,9 @@ void neuronet()
 	std::transform(z3.begin(), z3.end(), a3.begin(), [](double elem) -> double { return (1.0 / (1.0 + std::exp(-1 * elem))); });
 	auto result = max_index(a3);
 
+	//std::cout << "b22: " << data.b22 << std::endl;
+	//std::cout << "b33: " << data.b33 << std::endl;
+	//std::cout << "b33*b22: " << data.b33*data.b22 << std::endl;
 	//std::cout << "x: " << data.x << std::endl;
 	//std::cout << "b2: " << data.b2 << std::endl;
 	//std::cout << "w2*x: "<< data.w2 * data.x << std::endl;
