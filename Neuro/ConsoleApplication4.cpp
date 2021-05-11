@@ -5,6 +5,7 @@
 #include <cmath>
 #include <fstream>
 #include <string>
+#include <iomanip>
 
 void presenting_results();
 void neuronet();
@@ -19,19 +20,20 @@ int main()
 {
 	// create the window
 	sf::RenderWindow window(sf::VideoMode(xsize, ysize), "My window", sf::Style::Titlebar | sf::Style::Close);
-	//sf::View myView(sf::Vector2f(200, 150), sf::Vector2f(400, 300));
-	//window.setView(myView);
-	std::vector <sf::Vertex> lines(1);
+	std::vector <sf::Vector2f> lines(1);
 	sf::Vector2f Vect;
 	sf::Texture texture;
 	sf::Sprite sprite;
 	int f = 0;
-	bool neirarr[alldata] = { 0 };
-	bool arr[nstr][nstl] = { 0 };
+	double neirarr[alldata] = { 0 };
+	double arr[nstr][nstl] = { 0 };
 	texture.create(xsize, ysize);
 	texture.update(window);
 	sprite.setTexture(texture);
 	sprite.setColor(sf::Color::Black);
+	sf::CircleShape circle;
+	circle.setRadius(8);
+	circle.setFillColor(sf::Color::White);
 
 	int mousedown = 0;
 	// run the program as long as the window is open
@@ -49,12 +51,12 @@ int main()
 			else if (event.type == sf::Event::MouseButtonPressed)
 			{
 				mousedown = 1;
-				lines[0] = sf::Vertex(sf::Vector2f(sf::Mouse::getPosition(window)));
+				lines[0] = sf::Vector2f(sf::Mouse::getPosition(window));
 				texture.update(window);
 			}
 			else if ((event.type == sf::Event::MouseMoved) && (mousedown == 1))
 			{
-				lines.push_back(sf::Vertex(sf::Vector2f(sf::Mouse::getPosition(window))));
+				lines.push_back(sf::Vector2f(sf::Mouse::getPosition(window)));
 			}
 			else if (event.type == sf::Event::MouseButtonReleased)
 			{
@@ -79,13 +81,20 @@ int main()
 
 					for (int i = 0; i < nstr; i++)
 						for (int j = 0; j < nstl; j++)
-							arr[i][j] = 0;
+							arr[i][j] = 0.0;
 
 					sf::Image frame = texture.copyToImage();
 					for (int i = 0; i < xsize; i++)
 						for (int j = 0; j < ysize; j++)
 							if (frame.getPixel(i, j) != sf::Color::Black)
-								arr[nstr * j / ysize][nstl * i / xsize] = 1;
+								arr[nstr * j / ysize][nstl * i / xsize] += 1.0;
+					for (int i = 0; i < nstr; i++)
+						for (int j = 0; j < nstl; j++)
+						{
+							arr[i][j] /= 200;
+							if (arr[i][j] > 1)
+								arr[i][j] = 1;
+						}
 					for (int i = 0; i < nstr; i++)
 						for (int j = 0; j < nstl; j++)
 							neirarr[(28 * i) + j] = arr[i][j];
@@ -93,34 +102,30 @@ int main()
 				}
 				if (event.key.code == sf::Keyboard::Numpad0)
 				{
-					for (int i = 0; i < nstr; i++)
+					/*for (int i = 0; i < nstr; i++)
 					{
 						printf("\n");
 						for (int j = 0; j < nstl; j++)
-							printf("%d", arr[i][j]);
-					}
+							printf("%.2f", arr[i][j]);
+					}*/
 					printf("\n");
 					printf("\n");
-					for (int i = 0; i < alldata; i++)
-						printf("%d,", neirarr[i]);
 
 					std::ofstream of("./Data/x.txt");
-					//std::ofstream of("./x.txt");
 					if (!of.is_open())
 					{
 						std::cout << "Can't open file!";
 						exit(EXIT_FAILURE);
 					}
 					for (int i = 0; i < alldata - 1; i++)
-						of << neirarr[i] << ", ";
+						of << std::setprecision(4)<< neirarr[i] << ", ";
 					of << neirarr[alldata - 1];
 					of.close();
 					neuronet();
-					presenting_results ();
+					presenting_results();
 				}
 			}
 		}
-
 
 		f = 1;
 
@@ -130,7 +135,12 @@ int main()
 		//sprite.setColor(sf::Color::Red);
 		window.draw(sprite);
 
-		window.draw(&lines[0], lines.size(), sf::LinesStrip);
+		for (int i = 1; i < lines.size(); ++i)
+		{
+			circle.setPosition(lines[i]);
+			window.draw(circle);
+		}
+		//window.draw(&lines[0], lines.size(), sf::LinesStrip);
 
 		sprite.setTexture(texture);
 		sprite.setColor(sf::Color::White);
@@ -147,12 +157,9 @@ void neuronet()
 	data.w2 = w2.txt
 	data.w3 = w3.txt
 	and so on...
-
 	Everything is a matrix - vector is too = matrix <n * 1>
-
 	multiplication as usual *
 	sub and add works too using - and +
-
 	COMPILING: g++ main.cpp Data/data.cpp -std=c++2a
 	*/
 
@@ -175,7 +182,7 @@ void neuronet()
 	//std::cout << "w3: " << data.w3 << std::endl;
 	//std::cout << "b2: " << data.b2 << std::endl;
 	//std::cout << data.w3 * data.b2 << std::endl;
-    //std::cout << "z3: " << z3 << std::endl;
+	//std::cout << "z3: " << z3 << std::endl;
 	std::cout << "a3: " << a3 << std::endl;
 	std::cout << "result: " << result << std::endl;
 
@@ -199,9 +206,9 @@ size_t max_index(matrix::Matrix<>& matr)
 	return max_index;
 }
 
-void presenting_results ()
+void presenting_results()
 {
-	sf::RenderWindow ResWindow(sf::VideoMode(xsize, ysize), "Results window", sf::Style::Titlebar | sf::Style::Close);
+	sf::RenderWindow ResWindow(sf::VideoMode(250, 100), "Results window", sf::Style::Titlebar | sf::Style::Close);
 	sf::Text text;
 	sf::Font font;
 	font.loadFromFile("Times New Roman Cyr Regular.ttf");
@@ -223,6 +230,6 @@ void presenting_results ()
 			if (event.type == sf::Event::Closed)
 				ResWindow.close();
 		}
-	ResWindow.display();
+		ResWindow.display();
 	}
 }
