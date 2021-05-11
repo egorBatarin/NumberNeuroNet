@@ -33,12 +33,12 @@ int main()
 			else if (event.type == sf::Event::MouseButtonPressed)
 			{
 				mousedown = 1;
-				lines[0] = sf::Vertex(sf::Vector2f::Vector2(sf::Mouse::getPosition(window)));
+				lines[0] = sf::Vertex(sf::Vector2f(sf::Mouse::getPosition(window)));
 				texture.update(window);
 			}
 			else if ((event.type == sf::Event::MouseMoved) && (mousedown == 1))
 			{
-				lines.push_back(sf::Vertex(sf::Vector2f::Vector2(sf::Mouse::getPosition(window))));
+				lines.push_back(sf::Vertex(sf::Vector2f(sf::Mouse::getPosition(window))));
 			}
 			else if (event.type == sf::Event::MouseButtonReleased)
 			{

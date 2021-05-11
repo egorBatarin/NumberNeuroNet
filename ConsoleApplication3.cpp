@@ -26,7 +26,7 @@ int main()
 		{
 			if (event.type == sf::Event::MouseButtonPressed)
 			{
-				circle.setPosition(sf::Vector2f::Vector2(sf::Mouse::getPosition(window)));
+				circle.setPosition(sf::Vector2f(sf::Mouse::getPosition(window)));
 				window.draw(circle);
 				texture.update(window);
 				mousedown = 1;
@@ -34,7 +34,7 @@ int main()
 			if (event.type == sf::Event::Closed) window.close();
 			if ((event.type == sf::Event::MouseMoved) && (mousedown == 1))
 			{
-				circle.setPosition(sf::Vector2f::Vector2(sf::Mouse::getPosition(window)));
+				circle.setPosition(sf::Vector2f(sf::Mouse::getPosition(window)));
 				window.draw(circle);
 				texture.update(window);
 			}
